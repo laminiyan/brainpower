@@ -1,18 +1,18 @@
 // ==========================================
-// 🔊 보조 함수: 1층/3층 전용 특수 사운드 재생
+// 🔊 오디오 엔진 (아이폰 대응형: 싱글톤)
 // ==========================================
-function playSpecialArrivalSound() {
-    try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.frequency.value = 880; // 도착 시 고음 알림
-        gain.gain.value = 0.2;
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.2);
-    } catch (e) { console.warn("Audio error:", e); }
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = (type === 'SPECIAL') ? 880 : (type === 'UP' ? 600 : 300);
+    gain.gain.value = 0.1;
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
 }
 
 // ==========================================
@@ -20,13 +20,23 @@ function playSpecialArrivalSound() {
 // ==========================================
 function selectElevatorDifficulty(mode) {
     if (isGaming) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
     const diffKey = mode.toLowerCase();
     if (!DIFFICULTY_CONFIG[diffKey]) return;
+
     setDifficultyStatus(diffKey);
+
     const buttons = document.querySelectorAll('.mode-select-btn');
     buttons.forEach(btn => btn.classList.remove('selected'));
-    let targetButton = (diffKey === 'silver') ? buttons[0] : (diffKey === 'normal' ? buttons[1] : buttons[2]);
+
+    let targetButton = null;
+    if (diffKey === 'silver') targetButton = buttons[0];
+    else if (diffKey === 'normal') targetButton = buttons[1];
+    else if (diffKey === 'genius') targetButton = buttons[2];
+
     if (targetButton) targetButton.classList.add('selected');
+
     const statusText = document.getElementById('el-status-text');
     if (statusText) {
         const config = DIFFICULTY_CONFIG[diffKey];
@@ -36,88 +46,85 @@ function selectElevatorDifficulty(mode) {
 }
 
 // ==========================================
-// 🎧 오감 학습용 사전 테스트 함수
-// ==========================================
-function testHapticHint(direction, floorOffset) {
-    if (typeof playElevatorSound === 'function') playElevatorSound(direction);
-    if (navigator.vibrate) {
-        let pattern = [];
-        if (currentDifficulty === 'genius') {
-            for (let i = 0; i < floorOffset; i++) pattern.push(35, 20);
-        } else if (currentDifficulty === 'normal') {
-            const base = direction === 'UP' ? [65, 40] : [95, 55];
-            for (let i = 0; i < floorOffset; i++) pattern.push(...base);
-        } else {
-            const base = direction === 'UP' ? [140, 70] : [180, 90];
-            for (let i = 0; i < floorOffset; i++) pattern.push(...base);
-        }
-        navigator.vibrate(pattern);
-    }
-    const displayBox = document.getElementById('elevator-display-box');
-    if (displayBox) {
-        displayBox.style.boxShadow = direction === 'UP' ? `0 0 25px #4caf50` : `0 0 25px #f44336`;
-        setTimeout(() => { displayBox.style.boxShadow = "none"; }, 150);
-    }
-}
-
-// ==========================================
-// 🕹️ 실시간 층수 연산 및 오감 제어 장치 (1층/3층 피드백 추가)
+// 🕹️ 실시간 층수 연산 및 오감 제어 장치 (전체 로직 포함)
 // ==========================================
 function simulateElevatorMovement(tick, isDark) {
     const config = DIFFICULTY_CONFIG[currentDifficulty];
     if (!config) return;
 
     let isUp = Math.random() > 0.50; 
-    if (publicState.elActualStoppedFloor <= 3) isUp = Math.random() > 0.20;
+    if (publicState.elActualStoppedFloor <= 3) isUp = Math.random() > 0.20; 
     else if (publicState.elActualStoppedFloor >= 25) isUp = Math.random() > 0.80;
 
     let floorOffset = Math.floor(Math.random() * config.maxJump) + 1; 
     if (isUp) publicState.elActualStoppedFloor += floorOffset;
     else publicState.elActualStoppedFloor = Math.max(1, publicState.elActualStoppedFloor - floorOffset); 
 
-    const floor = publicState.elActualStoppedFloor;
+    const currentFloor = publicState.elActualStoppedFloor;
     const currentDisplay = document.getElementById('elevator-display');
     const currentDisplayBox = document.getElementById('elevator-display-box');
     const statusText = document.getElementById('el-status-text');
 
-    // [특수 이벤트: 1층/3층 도착 시]
-    if (floor === 1 || floor === 3) {
-        playSpecialArrivalSound();
+    // 🔔 1층/3층 도달 시 특수 피드백 (도착 이벤트)
+    if (currentFloor === 1 || currentFloor === 3) {
+        playSound('SPECIAL');
         if (currentDisplayBox) {
             currentDisplayBox.style.transition = "background-color 0.2s";
             currentDisplayBox.style.backgroundColor = "#ffeb3b";
-            setTimeout(() => currentDisplayBox.style.backgroundColor = "transparent", 300);
+            setTimeout(() => { currentDisplayBox.style.backgroundColor = "transparent"; }, 300);
         }
         if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+    } else {
+        playSound(isUp ? 'UP' : 'DOWN');
     }
 
-    // [기존 렌더링 로직]
+    // 렌더링 및 암흑 구간 연출
     if (!isDark) {
         if (statusText && typeof getElText === 'function') statusText.innerText = getElText('el_moving');
-        if (currentDisplay) currentDisplay.innerText = floor;
+        if (currentDisplay) currentDisplay.innerText = currentFloor;
     } else {
         if (tick === Math.floor(config.totalSteps * 0.7)) {
-            if (currentDisplay) { currentDisplay.innerText = floor; currentDisplay.style.color = "#2196F3"; }
+            if (currentDisplay) {
+                currentDisplay.classList.remove('blink-error');
+                currentDisplay.innerText = currentFloor;
+                currentDisplay.style.color = "#2196F3"; 
+            }
+            if (currentDisplayBox) currentDisplayBox.classList.remove('shake-action');
+            if (statusText && typeof getElText === 'function') statusText.innerText = getElText('el_indicator');
             setTimeout(() => {
                 if (tick < config.totalSteps - 1) {
                     const postDisplay = document.getElementById('elevator-display');
-                    if (postDisplay) { postDisplay.innerText = "❓"; postDisplay.style.color = "#ff9800"; }
+                    const postDisplayBox = document.getElementById('elevator-display-box');
+                    const postStatus = document.getElementById('el-status-text');
+                    if (postDisplay) {
+                        postDisplay.innerText = "❓";
+                        postDisplay.style.color = "#ff9800";
+                        postDisplay.classList.add('blink-error');
+                    }
+                    if (postDisplayBox) postDisplayBox.classList.add('shake-action');
+                    if (postStatus && typeof getElText === 'function') postStatus.innerText = getElText('el_dark_again');
                 }
             }, 300);
-        } else if (currentDisplay) currentDisplay.innerText = "❓";
+        } else {
+            if (currentDisplay) currentDisplay.innerText = "❓";
+        }
     }
 
-    // [일반 이동 시 진동]
-    if (navigator.vibrate && floor !== 1 && floor !== 3) {
+    // 🎯 진동 제어
+    if (navigator.vibrate && currentFloor !== 1 && currentFloor !== 3) {
         let pattern = [];
-        const diff = currentDifficulty;
-        const baseTick = (diff === 'genius') ? 35 : (isUp ? 65 : 95);
-        const baseGap = (diff === 'genius') ? 20 : (isUp ? 40 : 55);
-        for (let i = 0; i < floorOffset; i++) pattern.push(baseTick, baseGap);
+        const baseTick = (currentDifficulty === 'genius') ? 35 : (isUp ? 65 : 95);
+        const baseGap = (currentDifficulty === 'genius') ? 20 : (isUp ? 40 : 55);
+        for (let i = 0; i < floorOffset; i++) { pattern.push(baseTick, baseGap); }
         navigator.vibrate(pattern);
+    }
+
+    // 테두리 강조
+    if (currentDisplayBox && tick !== Math.floor(config.totalSteps * 0.7)) {
+        currentDisplayBox.style.boxShadow = isUp ? "0 0 25px #4caf50" : "0 0 25px #f44336";
+        setTimeout(() => { currentDisplayBox.style.boxShadow = "none"; }, 150);
     }
 }
 
 window.selectElevatorDifficulty = selectElevatorDifficulty;
-window.testHapticHint = testHapticHint;
 window.simulateElevatorMovement = simulateElevatorMovement;
