@@ -27,6 +27,16 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   border-radius: 12px;
 }
+.top-ad-container {
+    height: 90px !important;    /* 높이 90px 고정 */
+    min-height: 90px;          /* 최소 높이 보장 */
+    max-height: 90px;          /* 최대 높이 제한 */
+    overflow: hidden;          /* 내용물이 넘칠 경우 잘라내기 */
+    display: flex;             /* 내부 정렬을 원할 경우 추가 */
+    align-items: center;       /* 세로 중앙 정렬 */
+    justify-content: center;   /* 가로 중앙 정렬 */
+    position: relative;
+}
 
 .screen {
   width: 100%;
@@ -34,8 +44,10 @@ body {
   padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* space-between 대신 중앙 정렬을 사용하고 gap으로 간격을 조절하세요 */
+  justify-content: flex-start; 
   align-items: center;
+  gap: 20px; /* 요소들 사이의 고정 간격 */
 }
 
 .hidden { display: none !important; }
@@ -84,9 +96,28 @@ button:active { transform: scale(0.97); }
 .text-mint { color: #6bcb77 !important; }
 
 /* 하단 선택 카드 */
-#choice-zone { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-.choice-card { background-color: #2d2d2d; padding: 16px; border-radius: 10px; text-align: center; font-size: 16px; font-weight: bold; border: 1px solid #3d3d3d; color: #fff; }
+#choice-zone { 
+  display: flex; 
+  flex-direction: row; 
+  flex-wrap: wrap;        /* 핵심: 가로가 좁으면 자동으로 줄바꿈 */
+  gap: 10px; 
+  margin-bottom: 10px; 
+  width: 100%;            /* 부모 너비 100% */
+}
 
+.choice-card { 
+  flex: 1 1 0px;          /* 핵심: 카드가 남은 공간을 균등하게 차지하게 함 */
+  min-width: 80px;        /* 너무 작아지지 않게 최소 너비 설정 */
+  padding: 16px; 
+  background-color: #2d2d2d; 
+  border-radius: 10px; 
+  text-align: center; 
+  font-size: 16px; 
+  font-weight: bold; 
+  border: 1px solid #3d3d3d; 
+  color: #fff;
+  cursor: pointer;
+}
 /* 결과창 */
 #evaluation-title { font-size: 26px; color: #ffd93d; font-weight: bold; margin-top: 40px; }
 #evaluation-text { font-size: 15px; line-height: 1.6; color: #ccc; text-align: center; margin: 30px 0; padding: 0 10px; }

@@ -72,6 +72,15 @@
             background: #222;
             color: #fff;
         }
+        .top-ad-container {
+    height: 90px !important;    /* 높이 90px 고정 */
+    min-height: 90px;          /* 최소 높이 보장 */
+    max-height: 90px;          /* 최대 높이 제한 */
+    overflow: hidden;          /* 내용물이 넘칠 경우 잘라내기 */
+    display: flex;             /* 내부 정렬을 원할 경우 추가 */
+    align-items: center;       /* 세로 중앙 정렬 */
+    justify-content: center;   /* 가로 중앙 정렬 */
+}
     </style>
 </head>
 <body>
@@ -79,7 +88,20 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8ZN8HXP"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-
+    <div class="top-ad-container">
+        <div style="color: #444; font-size: 12px;">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7102044774234792"
+                crossorigin="anonymous"></script>
+            <!-- 광고 -->
+            <ins class="adsbygoogle"
+                style="display:inline-block;width:375px;height:90px"
+                data-ad-client="ca-pub-7102044774234792"
+                data-ad-slot="6932099033"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
     <!-- 메인 허브 박스 -->
     <div id="hub-container" style="padding-top: 0; overflow: hidden; margin-bottom: 30px;">
         

@@ -19,17 +19,13 @@ body {
 }
 
 .top-ad-container {
-    width: 100%;
-    max-width: 420px;
-    height: 45px; 
-    margin-bottom: 8px;
-    background-color: #1e1e1e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: 1px solid #2d2d2d;
-    flex-shrink: 0;
+    height: 90px !important;    /* 높이 90px 고정 */
+    min-height: 90px;          /* 최소 높이 보장 */
+    max-height: 90px;          /* 최대 높이 제한 */
+    overflow: hidden;          /* 내용물이 넘칠 경우 잘라내기 */
+    display: flex;             /* 내부 정렬을 원할 경우 추가 */
+    align-items: center;       /* 세로 중앙 정렬 */
+    justify-content: center;   /* 가로 중앙 정렬 */
 }
 
 #game-container {
@@ -237,7 +233,6 @@ body {
    ========================================================================== */
 @media (min-width: 768px) {
     body { background: radial-gradient(circle at center, #1f2d1f 0%, #121212 100%); padding: 20px; }
-    .top-ad-container { max-width: 580px; height: 55px; margin-bottom: 12px; }
     #game-container { max-width: 580px; height: 680px; max-height: 680px; padding: 24px 28px; border-radius: 28px; }
     .title-text { font-size: 24px; margin-bottom: 6px; }
     .desc-text { font-size: 14px; margin-bottom: 6px; }

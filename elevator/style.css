@@ -19,16 +19,13 @@ body {
 }
 
 .top-ad-container {
-    width: 100%;
-    max-width: 480px;
-    height: 60px;
-    margin-bottom: 20px;
-    background-color: #222;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: 1px solid #333;
+    height: 90px !important;    /* 높이 90px 고정 */
+    min-height: 90px;          /* 최소 높이 보장 */
+    max-height: 90px;          /* 최대 높이 제한 */
+    overflow: hidden;          /* 내용물이 넘칠 경우 잘라내기 */
+    display: flex;             /* 내부 정렬을 원할 경우 추가 */
+    align-items: center;       /* 세로 중앙 정렬 */
+    justify-content: center;   /* 가로 중앙 정렬 */
 }
 
 #game-container {
