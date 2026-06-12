@@ -1,6 +1,40 @@
 // ==========================================
 // 🎮 난이도 선택 제어 (새로운 DIFFICULTY_CONFIG 규격 완벽 반영)
 // ==========================================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playElevatorSound(floorOffset) {
+    try {
+        // playCannonSound와 똑같은 오디오 컨텍스트 관리 방식 사용
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        // 1~5층 주파수 배열
+        const scales = [261.63, 293.66, 329.63, 349.23, 392.00];
+        const targetFreq = scales[Math.min(Math.max(floorOffset, 1), 5) - 1];
+
+        osc.type = 'sine';
+        const currentTime = audioCtx.currentTime;
+
+        // 소리를 명확하게 하기 위해 주파수와 볼륨을 위 코드처럼 제어
+        osc.frequency.setValueAtTime(targetFreq, currentTime);
+        
+        gainNode.gain.setValueAtTime(0.15, currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.001, currentTime + 0.2); // 0.2초간 부드럽게 감소
+
+        osc.start();
+        osc.stop(currentTime + 0.2);
+    } catch (e) {
+        console.log("오디오 재생 실패:", e);
+    }
+}
+
 function selectElevatorDifficulty(mode) {
     if (isGaming) return; // 전역 마스터 플래그 참조
 
@@ -38,39 +72,6 @@ function selectElevatorDifficulty(mode) {
     }
 }
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playElevatorSound(floorOffset) {
-    try {
-        // playCannonSound와 똑같은 오디오 컨텍스트 관리 방식 사용
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
-        const osc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-
-        osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        // 1~5층 주파수 배열
-        const scales = [261.63, 293.66, 329.63, 349.23, 392.00];
-        const targetFreq = scales[Math.min(Math.max(floorOffset, 1), 5) - 1];
-
-        osc.type = 'sine';
-        const currentTime = audioCtx.currentTime;
-
-        // 소리를 명확하게 하기 위해 주파수와 볼륨을 위 코드처럼 제어
-        osc.frequency.setValueAtTime(targetFreq, currentTime);
-        
-        gainNode.gain.setValueAtTime(0.15, currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.001, currentTime + 0.2); // 0.2초간 부드럽게 감소
-
-        osc.start();
-        osc.stop(currentTime + 0.2);
-    } catch (e) {
-        console.log("오디오 재생 실패:", e);
-    }
-}
 // ==========================================
 // 🎧 오감 학습용 사전 테스트 함수 (currentDifficulty 기반 진동 제어)
 // ==========================================
