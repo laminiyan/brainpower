@@ -34,7 +34,7 @@ const i18nData = {
             stats_best: "🥇 역대 최고 속도: ",
             stats_avg: "⏱️ 최근 평균 속도: ",
             alert_copied: "결과가 성공적으로 복사되었습니다! 카톡에 자랑해 보세요. 😉",
-            share_template: "[🧠 3-대포 멀티태스킹 인지 검사 결과]\n• 인지 난이도: {mode}\n• 판정 결과: {status}\n• 순수 두뇌 연산 피지컬: {brain}ms\n• 시각-신체 반응 지연속도: {hand}ms\n\n지금 당신의 두뇌 FPS 실시간 스펙트럼을 측정해 보세요! 👇\nhttps://내게임주소.com",
+            share_template: "[🧠 3-대포 멀티태스킹 인지 검사 결과]\n• 인지 난이도: {mode}\n• 판정 결과: {status}\n• 순수 두뇌 연산 피지컬: {brain}ms\n• 시각-신체 반응 지연속도: {hand}ms\n\n지금 당신의 두뇌 FPS 실시간 스펙트럼을 측정해 보세요! 👇\nhttps://laminiyan.github.io/",
 
             share_btn: "🔗 뇌지컬 결과 복사하기 (카톡 자랑용)",
             retry_btn: "🔄 다음 세션 반복 훈련하기",

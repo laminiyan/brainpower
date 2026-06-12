@@ -22,7 +22,7 @@ const i18nData = {
             retry_btn: "다시 도전하기",
             guide_title: "💡 오감 극대화 훈련 필수 가이드",
             guide_li_1: "원활한 측정을 위해 스마트폰의 무음/매너 모드를 해제하세요.",
-            guide_li_2: "아이폰은 사파리 하단 [공유] ➡️ [홈 화면에 추가]로 실행해야 진동이 활성화됩니다.",
+            guide_li_2: "아이폰은 진동이 되지 않습니다.",
             footer_warning_1: "본 엔진은 순수한 인지 템포 측정 및 개인 두뇌 관리용 생활 건강(웰니스) 시뮬레이터입니다.",
             footer_warning_2: "의학적 진단, 치매의 치료 및 예방 등 의료 목적으로 설계되지 않았습니다."
         }
@@ -46,7 +46,7 @@ const i18nData = {
             retry_btn: "Try Again",
             guide_title: "💡 Essential Guide to Maximize Five Senses Training",
             guide_li_1: "Please disable silent/manner mode on your smartphone for smooth measurement.",
-            guide_li_2: "For iPhones, you must run it via Safari's bottom [Share] ➡️ [Add to Home Screen] to activate vibration.",
+            guide_li_2: "iPhone's vibration is not working",
             footer_warning_1: "This engine is a lifestyle health (wellness) simulator intended purely for cognitive tempo measurement and personal brain management.",
             footer_warning_2: "It is not designed for medical purposes such as medical diagnosis, treatment, or prevention of dementia."
         }
