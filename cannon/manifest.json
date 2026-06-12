@@ -1,0 +1,16 @@
+{
+  "short_name": "대포측정소",
+  "name": "3구 대포 뇌 피지컬 인지 측정소",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,0 +1,16 @@
+{
+  "short_name": "뇌지컬허브",
+  "name": "전세대 통합 인지 유연성 7판 완주 게임",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#121212",
+  "theme_color": "#1e1e1e",
+  "display": "standalone",
+  "orientation": "portrait"
+}

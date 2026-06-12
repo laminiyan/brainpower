@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+    <title>미스터리 엘리베이터 뇌 피지컬 측정소</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-ad-container">
+        <div style="color: #444; font-size: 12px;">Google AdSense Banner</div>
+    </div>
+
+    <div id="game-container">
+        
+        <div id="elevator-play-screen">
+            <div id="lobby-intro-zone" class="text-left-group">
+                <h1 class="title-text" style="margin-bottom: 4px;">🛗 미스터리 엘리베이터</h1>
+                <p class="desc-text" style="margin-bottom: 12px; font-size: 12px;">암흑 구간 동안 오직 미세 진동과 음정 변화로 최종 층수를 추론하세요.</p>
+                
+                <div style="margin-bottom: 12px; background: #222; padding: 10px; border-radius: 10px;">
+                    <p id="difficulty-title" style="font-size: 12px; color: #4caf50; margin: 0 0 6px 0; font-weight: bold;">⚙️ 난이도 선택</p>
+                    <div class="btn-group" style="margin-bottom: 10px;">
+                        <button class="num-btn mode-select-btn" style="padding: 8px 0; font-size: 13px;" onclick="selectElevatorDifficulty('SILVER')">쉬움🧘</button>
+                        <button class="num-btn mode-select-btn selected" style="padding: 8px 0; font-size: 13px;" onclick="selectElevatorDifficulty('NORMAL')">일반🧑</button>
+                        <button class="num-btn mode-select-btn" style="padding: 8px 0; font-size: 13px;" onclick="selectElevatorDifficulty('GENIUS')">어려움⚡</button>
+                    </div>
+
+                    <p id="practice-title" style="font-size: 12px; color: #2196F3; margin: 0 0 6px 0; font-weight: bold;">🎧 소리/진동 미리 연습</p>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="num-btn" id="btn-up-test" style="padding: 8px 0; font-size: 12px; background-color: #2c3e50;" onclick="testHapticHint('UP', 3)">🔼 상승 (3층)</button>
+                        <button class="num-btn" id="btn-down-test" style="padding: 8px 0; font-size: 12px; background-color: #2c3e50;" onclick="testHapticHint('DOWN', 1)">🔽 하강 (1층)</button>
+                    </div>
+                </div>
+
+                <h2 id="el-status-text" style="font-size: 13px; color: #ff9800; text-align: center; margin: 8px 0;">준비가 완료되면 아래 버튼을 누르세요.</h2>
+            </div>
+            
+            <div class="elevator-area" style="height: 220px; margin: 15px 0;">
+                <div id="elevator-display-box" style="width: 140px; height: 140px;">
+                    <div id="elevator-display" style="font-size: 60px;">1</div>
+                </div>
+            </div>
+            
+            <button id="el-start-btn" class="btn" style="background-color: #4caf50; border-color: #45a049; padding: 12px 0;">훈련 시작</button>
+        </div>
+
+        <div id="elevator-input-screen">
+            <div class="text-left-group">
+                <h2 id="input-screen-title" style="font-size: 18px; margin-bottom: 10px;">엘리베이터가 최종 멈춘 층수를 고르세요</h2>
+            </div>
+            
+            <div class="choice-row" style="margin: 10px 0; padding: 10px;">
+                <div class="choice-title" id="choice-screen-title" style="font-size: 13px; margin-bottom: 6px;">예측 최종 층수</div>
+                <div class="btn-group" id="elevator-btn-group"></div>
+            </div>
+            <br>
+            <button class="btn" id="el-submit-btn" style="padding: 12px 0;" disabled>정답 제출</button>
+        </div>
+
+        <div id="elevator-result-screen">
+            <div class="text-left-group">
+                <h2 id="el-result-title" style="font-size: 20px; margin-bottom: 4px;">측정 결과</h2>
+                <p id="el-result-meta" style="font-size: 11px; margin-bottom: 10px; color:#888;"></p>
+                
+                <div class="result-data-box" style="margin: 10px 0; font-size: 14px;">
+                    <p id="el-result-score" style="white-space: pre-line; margin-bottom: 10px;"></p>
+                    <div id="el-result-rt" style="line-height: 1.6; color: #ddd; font-size: 12px;"></div>
+                </div>
+            </div>
+            <br>
+            
+            <p id="ad-notice-text" style="font-size: 12px; color: #ff9800; display: none; margin-bottom: 10px; text-align: left;">
+                ⏳ 뇌 컨디션 재정비를 위해 잠시 동안 휴식 세션이 진행됩니다...
+            </p>
+
+            <button class="btn" id="el-share-btn" style="padding: 12px 0; margin-bottom: 8px;">📋 결과 복사해서 자랑하기</button>
+            <button class="btn" id="el-retry-btn" style="padding: 12px 0;">다시 도전하기</button>
+        </div>
+
+        <div class="device-guide-box" style="margin-top: 15px; padding: 10px; font-size: 11px;">
+            <strong id="guide-title">💡 오감 극대화 훈련 필수 가이드</strong>
+            <ul>
+                <li id="guide-li-1">원활한 측정을 위해 스마트폰의 <strong>무음/매너 모드를 해제</strong>하세요.</li>
+                <li id="guide-li-2">아이폰은 사파리 하단 <strong>[공유] ➡️ [홈 화면에 추가]</strong>로 실행해야 진동이 활성화됩니다.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer class="legal-footer" style="margin-top: 15px; font-size: 10px;">
+        <p id="footer-warning-1">본 엔진은 순수한 인지 템포 측정 및 개인 두뇌 관리용 생활 건강(웰니스) 시뮬레이터입니다.</p>
+        <p id="footer-warning-2">의학적 진단, 치매의 치료 및 예방 등 의료 목적으로 설계되지 않았습니다.</p>
+    </footer>
+    
+    <script src="./js/i18n-elevator.js"></script>
+    <script src="./js/elevator-config.js"></script>
+    <script src="./js/elevator-core.js"></script>
+    <script src="./js/elevator-ui.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+             // 🌟 1. 로컬스토리지 언어 설정 강제 팩 동기화 (최우선순위)
+            if (typeof i18n !== 'undefined') {
+                const savedLang = localStorage.getItem('global_lang') || 'en'; // 기본폴백 en
+                i18n.setLang(savedLang);
+                i18n.updateUITranslations(); // 즉시 영어 치환
+            }
+
+            // 1. 초기 실행 시점 전역 상태 락 바인딩 및 난이도 정상 주입
+            if (typeof window.selectElevatorDifficulty === 'function') {
+                window.selectElevatorDifficulty('NORMAL');
+            }
+
+            // 2. W3C 표준 규격에 맞춘 순수 UI 이벤트 리스너 안정적 위임
+            document.getElementById('el-start-btn')?.addEventListener('click', window.startElevatorGame);
+            document.getElementById('el-submit-btn')?.addEventListener('click', window.submitElevatorAnswer);
+            document.getElementById('el-retry-btn')?.addEventListener('click', window.resetElevatorGame);
+            document.getElementById('el-share-btn')?.addEventListener('click', window.copyElevatorResult);
+        });
+    </script>
+</body>
+</html>

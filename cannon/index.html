@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>3-대포 멀티태스킹 뇌 피지컬 검사 (Cognitive Test)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="top-ad-container"></div>
+
+    <div id="game-container">
+        
+        <!-- 1. 플레이 및 준비 대기 화면 -->
+        <div id="play-screen">
+            <div class="text-left-group">
+                <h1 class="title-text" id="cannon-main-title">🧠 3-대포 멀티태스킹 인지 검사</h1>
+                <p class="desc-text" id="cannon-main-desc">상단 벽에 부딪히는 동그란 포탄(●)의 개수를 대포별로 정확히 세어보세요.</p>
+                
+                <div class="difficulty-group">
+                    <button id="diff-btn-easy" class="diff-btn">🧘 쉬움 (20초)</button>
+                    <button id="diff-btn-normal" class="diff-btn active">🔥 일반 (20초)</button>
+                    <button id="diff-btn-hard" class="diff-btn">⚡ 어려움 (25초)</button>
+                </div>
+
+                <div id="status-text">[🔥 일반 모드] 20초 세션 선택됨 - 시작 버튼을 누르세요</div>
+            </div>
+
+            <div class="upper-barrier">
+                <div class="barrier-line"></div>
+                <div class="barrier-text" id="cannon-boundary-text">CRITICAL COGNITIVE BOUNDARY</div>
+            </div>
+
+            <div class="cannon-area">
+                <div class="cannon-wrapper">
+                    <div id="cannon-0" class="cannon">🪘</div>
+                    <div class="cannon-label" id="cannon-label-0">1번 대포</div>
+                    <div id="ball-zone-0" class="ball-path-zone"></div>
+                </div>
+
+                <div class="cannon-wrapper">
+                    <div id="cannon-1" class="cannon">🪘</div>
+                    <div class="cannon-label" id="cannon-label-1">2번 대포</div>
+                    <div id="ball-zone-1" class="ball-path-zone"></div>
+                </div>
+
+                <div class="cannon-wrapper">
+                    <div id="cannon-2" class="cannon">🪘</div>
+                    <div class="cannon-label" id="cannon-label-2">3번 대포</div>
+                    <div id="ball-zone-2" class="ball-path-zone"></div>
+                </div>
+            </div>
+
+            <div id="lobby-intro-zone" style="width:100%;">
+                <button id="start-btn" class="btn">🚀 뇌 피지컬 검사 시작</button>
+                <div class="device-guide-box">
+                    <span id="guide-focus">• 안내: 검사 중에는 포탄을 세는 데만 집중하세요.</span><br>
+                    <span id="guide-sound">• 소리 권장: 리드미컬한 청각 자극이 분할 인지 연산에 도움을 줍니다.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 수량 마킹 입력 화면 -->
+        <div id="input-screen">
+            <div class="text-left-group">
+                <h1 class="title-text" id="input-title" style="color:#2196F3;">📝 수량 마킹 단계</h1>
+                <p class="desc-text" id="input-desc" style="margin-bottom:8px;">각 대포가 발사하여 벽에 충돌시킨 포탄의 정확한 총개수를 지정해 주세요.</p>
+            </div>
+
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px;">
+                <div class="choice-row">
+                    <div class="choice-title" id="choice-label-0">🪘 1번 대포 발사 수량 선택</div>
+                    <div id="group-0" class="btn-group"></div>
+                </div>
+                <div class="choice-row">
+                    <div class="choice-title" id="choice-label-1">🪘 2번 대포 발사 수량 선택</div>
+                    <div id="group-1" class="btn-group"></div>
+                </div>
+                <div class="choice-row">
+                    <div class="choice-title" id="choice-label-2">🪘 3번 대포 발사 수량 선택</div>
+                    <div id="group-2" class="btn-group"></div>
+                </div>
+            </div>
+
+            <button id="submit-btn" class="btn" style="background-color:#4caf50; border-color:#43a047;" disabled>📊 내 두뇌 스펙트럼 확인하기</button>
+        </div>
+
+        <!-- 3. 결과 리포트 화면 -->
+        <div id="result-screen">
+            <div class="text-left-group">
+                <h1 class="title-text" id="result-title">📊 종합 진단 리포트</h1>
+                <p id="result-meta" class="desc-text" style="color:#888;"></p>
+            </div>
+
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                <div id="result-score" style="font-size:14px; font-weight:bold; line-height:1.4; white-space:pre-line; color:#ffffff; margin-bottom:12px;"></div>
+                
+                <div class="choice-row" style="background:#151515; border-color:#252525; padding:12px 14px; border-radius:8px;">
+                    <div class="choice-title" id="result-rt-title" style="color:#ffb74d; font-size:13px; font-weight:bold; margin-bottom:6px;">📈 최근 한 달간(4주)의 두뇌 인지 관리 보고서</div>
+                    <div id="result-rt" class="result-data-box" style="font-size:12px; line-height:1.6; color:#ddd;"></div>
+                </div>
+            </div>
+
+            <div style="width:100%;">
+                <button id="share-btn" class="btn">🔗 뇌지컬 결과 복사하기 (카톡 자랑용)</button>
+                <button id="retry-btn" class="btn">🔄 다음 세션 반복 훈련하기</button>
+                <div id="ad-notice-text" style="display:none; font-size:9px; color:#666; margin-top:4px; font-weight:bold;">뇌 휴식을 위해 임시 광고 동기화 중... 잠시만 기다려주세요.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="legal-footer">
+        <p id="footer-warning">본 검사는 간이 스크리닝 목적의 인지 훈련 도구이며, 의학적 진단을 대체할 수 없습니다.</p>
+        <p>© 2026 Cognitive Neurometric Systems. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 스크립트 종속성 호출 순서 최적화 -->
+    <script src="./js/i18n-cannon.js"></script>
+    <script src="./js/cannon-config.js"></script>
+    <script src="./js/cannon-core.js"></script>
+    <script src="./js/cannon-ui.js"></script>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 🌟 1. 로컬스토리지 언어 설정 강제 팩 동기화 (최우선순위)
+            if (typeof i18n !== 'undefined') {
+                const savedLang = localStorage.getItem('global_lang') || 'en'; // 기본폴백 en
+                i18n.setLang(savedLang);
+                i18n.updateUITranslations(); // 즉시 영어 치환
+            }
+
+            // 2. 외부 게임 엔진 기본 난이도 세션 구동
+            if (typeof setDifficulty === 'function') {
+                setDifficulty('normal');
+            }
+
+            // 난이도 변경 버튼 리스너 바인딩 및 자동 동기화
+            document.getElementById('diff-btn-easy').addEventListener('click', () => {
+                if (typeof setDifficulty === 'function') setDifficulty('easy');
+            });
+            document.getElementById('diff-btn-normal').addEventListener('click', () => {
+                if (typeof setDifficulty === 'function') setDifficulty('normal');
+            });
+            document.getElementById('diff-btn-hard').addEventListener('click', () => {
+                if (typeof setDifficulty === 'function') setDifficulty('hard');
+            });
+
+            document.getElementById('start-btn').addEventListener('click', () => {
+                if (typeof startCannonGame === 'function') startCannonGame();
+            });
+            document.getElementById('submit-btn').addEventListener('click', () => {
+                if (typeof submitCannonAnswer === 'function') submitCannonAnswer();
+            });
+            document.getElementById('retry-btn').addEventListener('click', () => {
+                if (typeof resetGame === 'function') resetGame();
+            });
+            document.getElementById('share-btn').addEventListener('click', () => {
+                if (typeof copyToClipboard === 'function') copyToClipboard();
+            });
+        });
+    </script>
+</body>
+</html>

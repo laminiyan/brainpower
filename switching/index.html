@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>뇌지컬 허브 - 인지전환</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <div id="start-screen" class="screen">
+      <h1 id="switching-title">🧠 두뇌 인지 유연성 검사</h1>
+      <p id="switching-desc">내 뇌 컨디션에 맞는 모드를 선택하세요.</p>
+      <div class="menu-buttons">
+        <button id="btn-easy" onclick="startGame('easy')">🧘 쉬움 모드</button>
+        <button id="btn-normal" onclick="startGame('normal')">🏃 일반 모드</button>
+        <button id="btn-hard" onclick="startGame('hard')">🏎️ 어려움 모드</button>
+      </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+      <div id="header-zone">
+        <div id="progress-container">
+          <div id="progress-bar"></div>
+        </div>
+        <div id="round-indicator">라운드: <span id="current-round">1</span> / 8</div>
+        <div id="guide-box">가이드 로딩중...</div>
+      </div>
+
+      <div id="grid-board"></div>
+
+      <div id="choice-zone"></div>
+    </div>
+
+    <div id="result-screen" class="screen hidden">
+      <h2 id="result-complete">검사 완료 🎯</h2>
+      <div id="evaluation-title">정확도 100% 완주!</div>
+      <p id="evaluation-text"></p>
+      <button id="retry-btn" onclick="resetGridGame()">다시 도전하기 🔄</button>
+    </div>
+  </div>
+
+    <script src="./js/i18n-switching.js"></script>
+    <script src="./js/grid-config.js"></script>
+    <script src="./js/grid-core.js"></script>
+    <script src="./js/grid-ui.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 🌟 1. 로컬스토리지 언어 설정 강제 팩 동기화 (최우선순위)
+            if (typeof i18n !== 'undefined') {
+                const savedLang = localStorage.getItem('global_lang') || 'en'; // 기본폴백 en
+                i18n.setLang(savedLang);
+                i18n.updateUITranslations(); // 즉시 영어 치환
+            }
+
+            // 메인 화면 로비 진입 시점 버튼 바인딩 연계 예시
+            // (마크업 내부의 실제 버튼 ID 포맷 구조에 맞추어 연동하세요)
+            document.getElementById('btn-mode-easy')?.addEventListener('click', () => window.startGridGame('easy'));
+            document.getElementById('btn-mode-normal')?.addEventListener('click', () => window.startGridGame('normal'));
+            document.getElementById('btn-mode-hard')?.addEventListener('click', () => window.startGridGame('hard'));
+            document.getElementById('btn-restart')?.addEventListener('click', window.resetGridGame);
+        });
+    </script>
+</body>
+</html>

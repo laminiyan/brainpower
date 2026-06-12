@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>뇌 피지컬 종합 측정소 (Brain HUB)</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+    
+    <link rel="stylesheet" href="hub-style.css">
+    <style>
+        /* 메인 박스 폭에 맞춰 꽉 차는 5:5 유틸리티 바 */
+        .hub-utility-bar {
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 24px;
+        }
+
+        /* 5:5 비율 및 border-radius: 1px 스타일 */
+        .utility-btn {
+            flex: 1;
+            background: #181818;
+            color: #aaa;
+            border: 1px solid #282828;
+            padding: 14px 0;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .utility-btn:first-child {
+            border-left: none;
+            border-top: none;
+            border-right: none;
+        }
+        .utility-btn:last-child {
+            border-right: none;
+            border-top: none;
+        }
+
+        .utility-btn:active {
+            background: #222;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-ad-container">
+        <div style="color: #444; font-size: 12px;">Google AdSense Banner</div>
+    </div>
+
+    <!-- 메인 허브 박스 -->
+    <div id="hub-container" style="padding-top: 0; overflow: hidden; margin-bottom: 30px;">
+        
+        <!-- 5:5 비율로 메인 박스 상단에 딱 맞게 안착된 유틸리티 바 -->
+        <div class="hub-utility-bar">
+            <button id="btn-hub-help" class="utility-btn" onclick="openHelpModal()">
+                <span>❓</span> 도움말
+            </button>
+            <button id="btn-hub-settings" class="utility-btn" onclick="openSettingsModal()">
+                <span>⚙️</span> 설정
+            </button>
+        </div>
+
+        <header class="hub-header">
+            <h1 class="hub-title" id="txt-hub-title">🧠 두뇌 피지컬 측정소</h1>
+            <p class="hub-subtitle" id="txt-hub-subtitle">전두엽 성능을 ms 단위로 정밀 측정하세요.</p>
+            <button class="dashboard-open-btn" id="btn-hub-dashboard" onclick="openDashboardModal()">📊 나의 두뇌 기록·추이 확인</button>
+        </header>
+
+        <div id="dashboardModal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="modal-close-btn" id="btn-hub-modal-close" onclick="closeDashboardModal()">✕ 닫기</button>
+                <div id="brain-mini-dashboard"></div>
+            </div>
+        </div>
+
+        <div class="game-card-row-zone">
+            <div class="game-card active" onclick="showGameDetail('cannon', this)">
+                <div class="card-icon">🚀</div>
+                <h2 class="card-name" id="card-name-cannon">대포 사격</h2>
+                <div class="card-badge color-red" id="card-badge-cannon">🎯 동적 피지컬</div>
+            </div>
+
+            <div class="game-card" onclick="showGameDetail('elevator', this)">
+                <div class="card-icon">🎧</div>
+                <h2 class="card-name" id="card-name-elevator">엘리베이터</h2>
+                <div class="card-badge color-green" id="card-badge-elevator">🛗 공간 인지</div>
+            </div>
+
+            <div class="game-card" onclick="showGameDetail('switching', this)">
+                <div class="card-icon">🎨</div>
+                <h2 class="card-name" id="card-name-switching">규칙 전환</h2>
+                <div class="card-badge color-blue" id="card-badge-switching">🌀 인지 유연성</div>
+            </div>
+        </div>
+
+        <div class="detail-display-box">
+            <div id="detail-cannon" class="detail-content active">
+                <h3 id="detail-title-cannon">🎯 초정밀 대포 사격 검사</h3>
+                <p id="detail-desc-cannon">눈으로 비행 오브젝트를 포착하고 손가락 끝으로 정밀 각도를 가르는 고속 타겟팅 뇌지컬 훈련입니다. 시각 피드백을 통한 <strong>뇌와 손의 조작 협응 속도(ms)</strong>를 가장 과학적으로 검증합니다.</p>
+                <button class="hub-enter-btn btn-cannon" onclick="enterGame('cannon')">측정소 입장하기 ⚡</button>
+            </div>
+
+            <div id="detail-elevator" class="detail-content">
+                <h3 id="detail-title-elevator">🛗 미스터리 엘리베이터 검사</h3>
+                <p id="detail-desc-elevator">화면의 숫자가 완전히 가려진 암흑 구역 내에서 오직 기기 고유의 <strong>미세 진동 횟수(촉각)와 음정의 가변 변화(청각)</strong>만을 결합하여 실시간 최종 도달 위치를 역추적하는 고차원 복합 공간 인지 훈련입니다.</p>
+                <button class="hub-enter-btn btn-elevator" onclick="enterGame('elevator')">측정소 입장하기 ⚡</button>
+            </div>
+
+            <div id="detail-switching" class="detail-content">
+                <h3 id="detail-title-switching">🔍 다이내믹 규칙 전환 검사</h3>
+                <p id="detail-desc-switching">눈이 편안한 톤다운 파스텔 화면 위에서 실시간으로 반전되는 변칙 질문 유형에 대응하는 훈련입니다. 뇌의 고정관념을 부수고 <strong>상황 변화에 즉각 대처하는 전두엽의 인지 유연성 및 브레이크 제어(ms)</strong>를 측정합니다.</p>
+                <button class="hub-enter-btn btn-switching" onclick="enterGame('switching')">측정소 입장하기 ⚡</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="analytics.js"></script>
+    <script src="brain-db.js"></script>
+    <script src="dashboard.js"></script> 
+    <script src="common/i18n.js"></script> <!-- 👈 정돈된 i18n-hub 전용 팩 파일 -->
+    <script src="modal.js"></script>
+    
+    <script>
+        let currentSelectedLang = 'ko';
+
+        // 언어 수동 변경 처리 (설정 모달 등에서 호출)
+        function toggleLanguage(lang) {
+            currentSelectedLang = lang;
+            localStorage.setItem('global_lang', lang);
+
+            if (typeof i18n !== 'undefined') {
+                i18n.setLang(lang);
+                // i18n.setLang 내부에서 updateUITranslations()가 자동 실행되지만, 
+                // HTML 내 정의된 전역 동기화를 위해 한 번 더 확실하게 호출합니다.
+                if (typeof updateUITranslations === 'function') {
+                    updateUITranslations();
+                } else if (typeof i18n.updateUITranslations === 'function') {
+                    i18n.updateUITranslations();
+                }
+            }
+        }
+
+        function enterGame(gameFolder) {
+            localStorage.setItem('global_lang', currentSelectedLang); 
+            window.location.href = `${gameFolder}/index.html`;
+        }
+
+        // 초기 실행 시 브라우저 시스템 언어 감지 및 동기화
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('global_lang')) {
+                currentSelectedLang = localStorage.getItem('global_lang');
+            } else {
+                const browserLang = navigator.language || navigator.userLanguage;
+                // 기존 코드의 ko 일 때 en이 들어가던 조건 버그 교정 완료
+                currentSelectedLang = (browserLang && browserLang.startsWith('ko')) ? 'ko' : 'en';
+                localStorage.setItem('global_lang', currentSelectedLang);
+            }
+
+            if (typeof i18n !== 'undefined') {
+                i18n.setLang(currentSelectedLang);
+                // 정돈된 i18n 패키지 내 스크립트 실행
+                if (typeof i18n.updateUITranslations === 'function') {
+                    i18n.updateUITranslations();
+                }
+            }
+        });
+
+        // i18n.js 통합본과 연동 유지를 위한 랩핑 핸들러 배치 (에러 방지용 안전장치)
+        function updateUITranslations() {
+            if (typeof i18n !== 'undefined' && typeof i18n.updateUITranslations === 'function') {
+                i18n.updateUITranslations();
+            }
+        }
+
+        function showGameDetail(gameId, targetCard) {
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => card.classList.remove('active'));
+            targetCard.classList.add('active');
+
+            const contents = document.querySelectorAll('.detail-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const targetContent = document.getElementById(`detail-${gameId}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        }
+
+        function openDashboardModal() {
+            if (typeof renderMiniBrainDashboard === 'function') {
+                renderMiniBrainDashboard(); 
+            }
+            const modal = document.getElementById('dashboardModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeDashboardModal() {
+            const modal = document.getElementById('dashboardModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+</body>
+</html>
+<!--
+
+동적 피지컬 (순발력): 대포 사격
+
+작업 기억 (뇌 RAM): 엘리베이터
+
+인지 유연성 (적응력): (규칙 전환 게임)
+
+시각 기억 (캡처력): (패턴 기억 게임)
+
+뇌 지구력 (집중력): (지속 주의력 게임)
+
+-->

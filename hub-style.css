@@ -1,0 +1,329 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Malgun Gothic', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 15px 10px;
+}
+
+.top-ad-container {
+    width: 100%;
+    max-width: 480px;
+    height: 60px;
+    margin-bottom: 15px;
+    background-color: #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #2d2d2d;
+}
+
+#hub-container {
+    width: 100%;
+    max-width: 480px;
+    background: #1a1a1a;
+    padding: 20px 16px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+}
+
+.hub-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.hub-title {
+    font-size: 22px;
+    margin: 0 0 4px 0;
+    color: #ffffff;
+}
+
+.hub-subtitle {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+}
+
+/* 📊 대시보드 모달 열기 버튼 */
+.dashboard-open-btn {
+    background: #2a3540;
+    border: 1px solid #2196F3;
+    color: #2196F3;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.dashboard-open-btn:active {
+    background: #2196F3;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.4);
+}
+
+/* 🔥 [핵심 변경] 절대 줄바꿈 없이, 한 줄에 3개가 칼정렬되는 컨테이너 */
+.game-card-row-zone {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;     /* 절대 아래 줄로 떨어지지 않음 기믹 */
+    gap: 8px;              /* 카드 사이 콤팩트한 간격 */
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* 🔲 [치수 조정] 한 줄 3개 고정형 마스터 카드 디자인 */
+.game-card {
+    flex: 0 0 calc(33.333% - 5.3px); /* 3등분으로 완벽 분할 정렬 */
+    background: #242424;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 12px 4px;      /* 좁은 폭에 맞춰 상하좌우 여백 압축 */
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* 💡 선택된 카드의 하이라이트 전장 표시 */
+.game-card.active {
+    border-color: #2196F3;
+    background: #2a3540;
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.3);
+}
+
+.card-icon {
+    font-size: 26px;        /* 이모지 크기 콤팩트 최적화 */
+    margin-bottom: 4px;
+}
+
+.card-name {
+    font-size: 13px;        /* 한 줄 배정을 위한 타이틀 폰트 최적화 */
+    margin: 0 0 6px 0;
+    font-weight: bold;
+    letter-spacing: -0.5px; /* 글자 자간 압축으로 가독성 확보 */
+}
+
+.card-badge {
+    font-size: 9px;         /* 모바일 3분할 환경에서 텍스트 줄바꿈 방지 */
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+    white-space: nowrap;    /* 절대 배지가 두 줄로 찢어지지 않게 고정 */
+}
+.color-red { background: #5c1d1d; color: #ff8a8a; }
+.color-green { background: #1b4d22; color: #8aff96; }
+.color-blue { background: #1d3557; color: #a8dadc; }
+
+/* ========================================== */
+/* 📝 하단 고정 상세 설명창 및 입장 버튼 스타일 */
+/* ========================================== */
+.detail-display-box {
+    background: #1e1e1e;
+    border: 1px solid #2d2d2d;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 180px; 
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.detail-content {
+    display: none; 
+    animation: fadeIn 0.3s ease;
+}
+
+.detail-content.active {
+    display: block; 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.detail-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: #fff;
+}
+
+.detail-content p {
+    margin: 0 0 16px 0;
+    font-size: 12px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* 🚀 최종 하단 입장 버튼 스타일 */
+.hub-enter-btn {
+    width: 100%;
+    border: none;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-cannon { background: #e53935; }
+.btn-cannon:hover { background: #c62828; }
+.btn-elevator { background: #4caf50; }
+.btn-elevator:hover { background: #388e3c; }
+.btn-switching { background: #2196F3; } 
+.btn-switching:hover { background: #1976D2; }
+
+.hub-guide-box {
+    padding: 10px;
+    background: #111;
+    border-left: 3px solid #2196F3;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #bbb;
+}
+
+.legal-footer {
+    margin-top: 20px;
+    font-size: 10px;
+    color: #444;
+    text-align: center;
+    max-width: 480px;
+}
+
+/* ========================================== */
+/* 📥 화면 전체를 덮는 모달 팝업 레이아웃 */
+/* ========================================== */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); 
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.8);
+    animation: modalBounce 0.2s ease-out;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 14px; right: 14px;
+    background: #242424;
+    border: 1px solid #444;
+    color: #bbb;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+.modal-close-btn:active {
+    background: #333;
+    color: #fff;
+}
+
+@keyframes modalBounce {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* ========================================== */
+/* 📊 실시간 종합 대시보드 다크 테마 커스텀     */
+/* ========================================== */
+.mini-db-card {
+    background: transparent; 
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    font-family: 'Malgun Gothic', sans-serif;
+    box-shadow: none;
+}
+
+.mini-db-card h3 {
+    margin: 0 0 15px 0;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: -0.5px;
+}
+
+.db-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.db-item {
+    background: #242424; 
+    border: 1px solid #2d2d2d;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 11px;
+    color: #aaa;
+    text-align: left;
+}
+
+.db-item strong {
+    color: #888;
+    font-weight: normal;
+}
+
+.db-val {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.db-trend-zone {
+    margin-top: 5px;
+}
+
+.trend-badge {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 10px;
+    display: inline-block;
+}
+
+.trend-badge.success { 
+    background: #1b3222; 
+    color: #8aff96; 
+    border: 1px solid #2e5c38; 
+}
+
+.trend-badge.fail { 
+    background: #421d1d; 
+    color: #ff8a8a; 
+    border: 1px solid #6b2d2d; 
+}
