@@ -38,30 +38,33 @@ function selectElevatorDifficulty(mode) {
     }
 }
 
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 function playElevatorSound(floorOffset) {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // 1. 아이폰 대응: 사용자 상호작용 후 컨텍스트를 강제로 깨움
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     
-    // 1~5층에 대응하는 직관적인 음계 (도, 레, 미, 파, 솔)
-    // 5층으로 갈수록 소리가 높아지지만, 훨씬 깔끔합니다.
+    // 1~5층에 따른 음계 (도, 레, 미, 파, 솔)
     const scales = [261.63, 293.66, 329.63, 349.23, 392.00];
-    osc.frequency.value = scales[Math.min(floorOffset, 5) - 1];
+    const index = Math.min(Math.max(floorOffset, 1), 5) - 1;
     
-    // 부드러운 사인파 사용 (정신 사납지 않음)
-    osc.type = 'sine';
+    osc.frequency.value = scales[index];
+    osc.type = 'sine'; // 가장 깔끔한 소리
     
-    // 짧고 간결하게 (0.2초)
     gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
     
     osc.start();
     osc.stop(audioCtx.currentTime + 0.2);
 }
-
 // ==========================================
 // 🎧 오감 학습용 사전 테스트 함수 (currentDifficulty 기반 진동 제어)
 // ==========================================
